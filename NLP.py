@@ -9,14 +9,9 @@ import json
 import glob
 from pdf2image import convert_from_path 
 
-# --- Configuration: Separate Output Paths ---
 
-# 🚨 REPLACE THIS WITH THE ACTUAL FULL PATH TO YOUR FOLDER CONTAINING PDFs
-# Example: INPUT_FOLDER_PATH = '/Users/midididdisushanth/Documents/10 - Contracts/' 
 INPUT_FOLDER_PATH = '/Users/midididdisushanth/UipAth Project/10 - Contracts' 
-# You can set this path to where your PDFs are located, or keep 'input_contracts'
 
-# Base directory for all outputs
 BASE_OUTPUT_DIR = 'Processed Outputs' 
 # Separate directories for each output type
 IMAGE_OUTPUT_DIR = os.path.join(BASE_OUTPUT_DIR, '/Users/midididdisushanth/UipAth Project/PreProcessed outputs')
@@ -25,7 +20,7 @@ NLP_OUTPUT_DIR = os.path.join(BASE_OUTPUT_DIR, '/Users/midididdisushanth/UipAth 
 
 OUTPUT_JSON_FILE = os.path.join(NLP_OUTPUT_DIR, 'extracted_contract_data.json')
 
-# Load the small English spaCy model globally
+
 try:
     nlp = spacy.load("en_core_web_sm")
     print("✅ spaCy model loaded successfully.")
@@ -33,7 +28,7 @@ except OSError:
     print("❌ spaCy model 'en_core_web_sm' not found. Please run: python -m spacy download en_core_web_sm")
     exit()
 
-# --- Preprocessing and NLP Functions (Kept for completeness) ---
+
 
 def preprocess_image_for_ocr(pil_image):
     """Applies preprocessing to a PIL Image object."""
@@ -67,7 +62,7 @@ def perform_nlp_analysis(text):
                 contract_entities[ent.label_].append(ent.text.strip())
     return contract_entities
 
-# --- Core Processing Logic (Modified to use new paths) ---
+
 
 def process_single_contract_page(page_image, base_filename, page_num):
     """Handles the full workflow for a single image/page."""
@@ -103,10 +98,6 @@ def process_single_contract_page(page_image, base_filename, page_num):
     return extracted_data
 
 
-# ----------------------------------------------------------------------
-## 🚀 Main Execution: Directory Traversal
-# ----------------------------------------------------------------------
-
 if __name__ == "__main__":
     
     # --- Setup All Directories ---
@@ -115,9 +106,9 @@ if __name__ == "__main__":
             os.makedirs(directory, exist_ok=True)
             print(f"Creating output directory: {directory}")
 
-    # --- File Discovery ---
+   
     if not os.path.isdir(INPUT_FOLDER_PATH):
-        # Create a placeholder folder if it doesn't exist for the user
+       
         os.makedirs(INPUT_FOLDER_PATH, exist_ok=True)
         print(f"🛑 Input directory not found. Created a placeholder: {INPUT_FOLDER_PATH}")
         print("Please place your PDF documents inside this folder and run the script again.")
@@ -150,7 +141,7 @@ if __name__ == "__main__":
                 if result:
                     all_contract_data.append(result)
             
-        # Save 3: NLP Structured Data (Final JSON)
+      
         with open(OUTPUT_JSON_FILE, 'w', encoding='utf-8') as f:
             json.dump(all_contract_data, f, indent=4)
             
